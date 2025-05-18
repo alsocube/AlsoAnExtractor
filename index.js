@@ -4,7 +4,6 @@ const { Client, Collection, Events, GatewayIntentBits, REST, Routes } = require(
 const { clientId, token } = require('./config.json');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const { default: axios } = require('axios');
-const { url } = require('node:inspector');
 
 const commands = [];
 client.commands = new Collection();
