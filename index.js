@@ -55,7 +55,7 @@ client.on(Events.InteractionCreate, async interaction => {
             const lastTag = focusedValue.split(" ").pop();
             const apiUrl = `${gelbooru}${tagsList}&name_pattern=%${lastTag}%&orderby=count`;
     	    const response = await axios.get(apiUrl);
-    	    const write = fs.writeFileSync('tags.txt', response.data, { encoding: 'utf-8' });
+    	    fs.writeFileSync('tags.txt', response.data, { encoding: 'utf-8' });
             const contents = fs.readFileSync('tags.txt', { encoding: 'utf-8' });
     	    const pattern = /<name>(.*?)<\/name>/g;
     	    const matches = [...contents.matchAll(pattern)].map(match => match[1]);
