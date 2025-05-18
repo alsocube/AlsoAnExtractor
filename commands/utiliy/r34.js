@@ -26,8 +26,9 @@ module.exports = {
             }
             const tags = interaction.options.getString('tags') ?? 'sort:updated';
             const userinput2 = interaction.options.getString('amounts') ?? 1;
-            const gelbooru = "http://rule34.xxx/";
+            const r34 = "http://api.rule34.xxx/";
             const posts = "index.php?page=dapi&s=post&q=index";
+            const key = "&api_key=7ac18acff5d04b6e54b4712a21a11aa7795522fd7e5032e4db782fe6e8136193&id=1345747";
             const fetchContent = async (url) => {
                 try {
                     const response = await axios.get(url);
@@ -47,11 +48,11 @@ module.exports = {
             const main = async () => {
                 if (parseInt(userinput2) > 1 && !String(tags).startsWith("id")) {
                     for (let y = 0; y < parseInt(userinput2); y++) {
-                        const url = `${gelbooru}${posts}&limit=${y + 1}&tags=${tags}+sort%3arandom`;
+                        const url = `${r34}${posts}&limit=${y + 1}&tags=${tags}${key}`;
                         await fetchContent(url);
                     }
                 } else if (parseInt(userinput2) == 1) {
-                    const url = `${gelbooru}${posts}&limit=1&tags=${tags}+sort%3arandom`;
+                    const url = `${r34}${posts}&limit=1&tags=${tags}${key}`;
                     await fetchContent(url);
                 }
                 const urls = extractUrls();
@@ -62,5 +63,6 @@ module.exports = {
                     await interaction.editReply({ files: urls });
                 }
             };
+        main();
     }
 }

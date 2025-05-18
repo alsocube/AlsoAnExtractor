@@ -47,8 +47,8 @@ client.once(Events.ClientReady, readyClient => {
 
 client.on(Events.InteractionCreate, async interaction => {
     if (interaction.isAutocomplete()) {
-    	const command = interaction.client.commands.get(interaction.commandName);
-		if (command == "gelbooru") {
+		commandName = interaction.commandName; 
+    	if (commandName === 'gelbooru') {
 			const gelbooru = "http://gelbooru.com/";
     		const tagsList = "index.php?page=dapi&s=tag&q=index";
     		try {
@@ -56,35 +56,17 @@ client.on(Events.InteractionCreate, async interaction => {
         	    const lastTag = focusedValue.split(" ").pop();
         	    const apiUrl = `${gelbooru}${tagsList}&name_pattern=%${lastTag}%&orderby=count`;
     		    const response = await axios.get(apiUrl);
-    		    fs.writeFileSync('tags.txt', response.data, { encoding: 'utf-8' });
-        	    const contents = fs.readFileSync('tags.txt', { encoding: 'utf-8' });
+        	    const contents = response.data;
     		    const pattern = /<name>(.*?)<\/name>/g;
     		    const matches = [...contents.matchAll(pattern)].map(match => match[1]);
-    		    const choices = matches.slice(0, 25);			
+    		    const choices = matches.slice(0, 25);
+			
     		    await interaction.respond(choices.map(choice => ({ name: choice, value: choice })));
     		} catch (error) {
     		    // ...
     		}
-		} else if (command == "r34") {
-			const gelbooru = "http://rule34.xxx/";
-			const tagsList = "index.php?page=dapi&s=tag&q=index";
-			try {
-			    const focusedValue = interaction.options.getFocused(true).value;
-			    const lastTag = focusedValue.split(" ").pop();
-			    const apiUrl = `${gelbooru}${tagsList}&name_pattern=%${lastTag}%`;
-			    const response = await axios.get(apiUrl);
-			    fs.writeFileSync('tags.txt', response.data, { encoding: 'utf-8' });
-			    const contents = fs.readFileSync('tags.txt', { encoding: 'utf-8' });
-			    const pattern = /name\=(.*?)/g;
-			    const matches = [...contents.matchAll(pattern)].map(match => match[1]);
-			    const choices = matches.slice(0, 25);			
-			    await interaction.respond(choices.map(choice => ({ name: choice, value: choice })));
-			} catch (error) {
-			    // ...
-			}
 		}
-    }
-
+	}
 
     if (interaction.isChatInputCommand()) {
         const command = interaction.client.commands.get(interaction.commandName);
