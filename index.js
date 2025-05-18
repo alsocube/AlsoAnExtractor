@@ -75,7 +75,7 @@ client.on(Events.InteractionCreate, async interaction => {
 			    const response = await axios.get(apiUrl);
 			    fs.writeFileSync('tags.txt', response.data, { encoding: 'utf-8' });
 			    const contents = fs.readFileSync('tags.txt', { encoding: 'utf-8' });
-			    const pattern = /<name>(.*?)<\/name>/g;
+			    const pattern = /name\=(.*?)/g;
 			    const matches = [...contents.matchAll(pattern)].map(match => match[1]);
 			    const choices = matches.slice(0, 25);			
 			    await interaction.respond(choices.map(choice => ({ name: choice, value: choice })));
